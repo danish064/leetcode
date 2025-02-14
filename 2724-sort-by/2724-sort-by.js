@@ -4,18 +4,19 @@
  * @return {Array}
  */
 var sortBy = function (arr, fn) {
-    let sortedArr = arr;
+    if (arr.length <= 1) return arr;
 
-    for (let i = 0; i < arr.length; i++) {
-        for (let j = i; j < arr.length; j++) {
-            if (fn(arr[i]) > fn(arr[j])) {
-                // SWAP
-                temp = arr[i];
-                arr[i] = arr[j];
-                arr[j] = temp;
-            }
-        }
+    let pivot = arr[arr.length - 1];
+    let left = [], right = [], middle = [];
+
+    for (let el of arr) {
+        let transformed = fn(el);
+        let pivotValue = fn(pivot);
+
+        if (transformed < pivotValue) left.push(el);
+        else if (transformed > pivotValue) right.push(el);
+        else middle.push(el); // Handle duplicates
     }
-    return sortedArr;
 
+    return [...sortBy(left, fn), ...middle, ...sortBy(right, fn)];
 };
